@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         binding.progress.visibility = if(model is MainViewModel.UiModel.Loading) View.VISIBLE else View.GONE
         when(model) {
             is MainViewModel.UiModel.Content -> adapter.characters = model.characters
-            is MainViewModel.UiModel.Navigation -> startActivity<CharacterActivity> { putExtra(CHARACTER, model.character) }
+            is MainViewModel.UiModel.Navigation -> startActivity<CharacterActivity> { putExtra(CHARACTER, model.character.id) }
         }
     }
 

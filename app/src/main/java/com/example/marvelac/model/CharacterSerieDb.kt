@@ -9,9 +9,8 @@ import androidx.room.Relation
 data class CharacterSerieDb (
     @PrimaryKey var id : Long,
     var name: String,
-    var description: String,
     var imageURL: String,
-    var characterId: Int
+    var characterId: Long
 )
 
 data class CharacterWithSeries (

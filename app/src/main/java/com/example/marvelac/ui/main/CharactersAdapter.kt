@@ -10,8 +10,7 @@ import com.example.marvelac.model.CharacterDb
 import inflate
 import loadUrl
 
-class CharactersAdapter(val listener: (CharacterDb) -> Unit) :
-    RecyclerView.Adapter<CharactersAdapter.ViewHolder>() {
+class CharactersAdapter(val listener: (CharacterDb) -> Unit) : RecyclerView.Adapter<CharactersAdapter.ViewHolder>() {
 
     var characters : List<CharacterDb> by basicDiffUtil(
         emptyList(),

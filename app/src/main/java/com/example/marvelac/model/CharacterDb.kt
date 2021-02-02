@@ -11,5 +11,5 @@ data class CharacterDb (
     @PrimaryKey var id : Long,
     var name: String,
     var description: String,
-    var imageURL: String?
+    var imageURL: String
 ) : Parcelable

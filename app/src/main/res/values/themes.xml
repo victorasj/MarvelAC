@@ -13,4 +13,10 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="AppTheme.DarkOverlay" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="ExtraSmallText" parent="@style/TextAppearance.AppCompat.Small.Inverse">
+        <item name="android:textSize">10sp</item>
+    </style>
 </resources>
