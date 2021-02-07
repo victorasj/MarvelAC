@@ -2,7 +2,7 @@ package com.example.marvelac
 
 import android.app.Application
 import androidx.room.Room
-import com.example.marvelac.model.database.MarvelDatabase
+import com.example.marvelac.data.database.MarvelDatabase
 import com.facebook.stetho.Stetho
 
 class MarvelApp: Application() {
@@ -16,7 +16,8 @@ class MarvelApp: Application() {
             this,
             MarvelDatabase::class.java,
             "marvel-db"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
         Stetho.initializeWithDefaults(this);
         super.onCreate()
     }

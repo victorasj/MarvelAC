@@ -4,22 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.marvelac.model.CharacterDb
-import com.example.marvelac.repositories.MarvelRepository
+import com.example.interactor.GetCharacters
+import com.example.marvelac.Event
+import com.example.marvelac.ui.common.ScopedViewModel
 import kotlinx.coroutines.launch
-import ui.common.Scope
-import ui.common.Scope.Impl
+import com.example.domain.Character
+import com.example.marvelac.ui.common.createURLCharacter
 
-class MainViewModel(private val repository: MarvelRepository) : ViewModel(), Scope by Impl() {
+class MainViewModel(private val getCharacters: GetCharacters) : ScopedViewModel() {
 
-    init {
-        initScope()
-    }
+
 
     sealed class UiModel {
         object Loading : UiModel()
-        class Content(val characters : List<CharacterDb>) : UiModel()
-        class Navigation(val character : CharacterDb) : UiModel()
+        class Content(val characters : List<Character>) : UiModel()
     }
 
     private val _characters = MutableLiveData<UiModel>()
@@ -29,27 +27,27 @@ class MainViewModel(private val repository: MarvelRepository) : ViewModel(), Sco
             return _characters
         }
 
+    private val _navigateToCharacter = MutableLiveData<Event<Character>>()
+    val navigateToCharacter: LiveData<Event<Character>> get() = _navigateToCharacter
+
 
     private fun refresh() {
         launch {
             _characters.value = UiModel.Loading
-            _characters.value = UiModel.Content(repository.findCharacters())
+            _characters.value = UiModel.Content(getCharacters.invoke(createURLCharacter()))
         }
     }
 
-    fun onCharacterClick(character: CharacterDb) {
-        _characters.value = UiModel.Navigation(character)
+    fun onCharacterClick(character: Character) {
+        _navigateToCharacter.value = Event(character)
     }
 
-    override fun onCleared() {
-        cancelScope()
-        super.onCleared()
-    }
+
 }
 
 @Suppress("UNCHECKED_CAST")
-class MainViewModelFactory(private val marvelRepository: MarvelRepository) :
+class MainViewModelFactory(private val getCharacters: GetCharacters) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        MainViewModel(marvelRepository) as T
+        MainViewModel(getCharacters) as T
 }

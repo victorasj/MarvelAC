@@ -3,12 +3,12 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 def apikeyPropertiesFile = rootProject.file("apikey.properties")
 def apikeyProperties = new Properties()
 apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
-
 
 android {
 
@@ -24,8 +24,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        //buildConfigField("String", "PUBLIC_KEY", apikeyProperties["PUBLIC_KEY"])
-        //buildConfigField("String", "PRIVATE_KEY", apikeyProperties["PRIVATE_KEY"])
+        //buildConfigField("String", "PUBLIC_KEY", apikeyProperties['PUBLIC_KEY'])
+        //buildConfigField("String", "PRIVATE_KEY", "PRIVATE_KEY")
 
     }
 
@@ -59,7 +59,14 @@ android {
 }
 
 dependencies {
+    implementation project(":data")
+    implementation project(":domain")
+    implementation project(":interactor")
+
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
     def room_version = "2.2.6"
 
 
@@ -72,9 +79,13 @@ dependencies {
     //LifeCycle
     implementation 'androidx.lifecycle:lifecycle-common:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-runtime:2.2.0'
-    implementation 'android.arch.lifecycle:extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+
+
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.1'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
@@ -111,11 +122,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
 
+
 task readFile(){
     doLast{
         File file = rootProject.file("apikey.properties")
-        println file.text
-        println ""
         file.readLines().each{
             println it
         }

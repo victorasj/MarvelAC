@@ -11,6 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.marvelac.MarvelApp
 import kotlin.properties.Delegates
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
+
 
 inline fun <reified T : Activity> Context.intentFor(body: Intent.() -> Unit): Intent = Intent(this, T::class.java).apply(body)
 
@@ -23,7 +28,6 @@ fun ImageView.loadUrl(url: String) {
 }
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = true): View = LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
-
 
 
 inline fun <VH : RecyclerView.ViewHolder, T> RecyclerView.Adapter<VH>.basicDiffUtil(
@@ -46,5 +50,22 @@ inline fun <VH : RecyclerView.ViewHolder, T> RecyclerView.Adapter<VH>.basicDiffU
 
     }
 
+@Suppress("UNCHECKED_CAST")
+inline fun <reified T : ViewModel> Fragment.getViewModel(crossinline factory: () -> T): T {
+
+    val vmFactory = object : ViewModelProvider.Factory {
+        override fun <U : ViewModel> create(modelClass: Class<U>): U = factory() as U
+    }
+
+    return ViewModelProvider(this, vmFactory).get()
+}
+
+
+
 val Context.app: MarvelApp
     get() = applicationContext as MarvelApp
+
+val Fragment.app: MarvelApp
+    get() = ((activity?.app)
+        ?: IllegalStateException("Fragment needs to be attach to the activity to access the App instance"))
+            as MarvelApp

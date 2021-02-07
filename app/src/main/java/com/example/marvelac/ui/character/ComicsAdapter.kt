@@ -4,16 +4,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import basicDiffUtil
+import com.example.domain.CharacterComic
 import com.example.marvelac.R
 import com.example.marvelac.databinding.ComicViewBinding
-import com.example.marvelac.databinding.SerieViewBinding
-import com.example.marvelac.model.CharacterComicDb
 import inflate
 import loadUrl
 
 class ComicsAdapter() : RecyclerView.Adapter<ComicsAdapter.ViewHolder>() {
 
-    var comics : List<CharacterComicDb> by basicDiffUtil(
+    var comics : List<CharacterComic> by basicDiffUtil(
         emptyList(),
         areItemsTheSame = { old, new -> old.id == new.id }
     )
@@ -29,7 +28,7 @@ class ComicsAdapter() : RecyclerView.Adapter<ComicsAdapter.ViewHolder>() {
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         private val binding = ComicViewBinding.bind(view)
-        fun bind(comic : CharacterComicDb) = with(binding){
+        fun bind(comic : CharacterComic) = with(binding){
             comicName.text = comic.name
             comic.imageURL.let { comicImage.loadUrl(comic.imageURL) }
         }

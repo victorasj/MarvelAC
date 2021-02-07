@@ -6,13 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import basicDiffUtil
 import com.example.marvelac.R
 import com.example.marvelac.databinding.CharacterViewBinding
-import com.example.marvelac.model.CharacterDb
+import com.example.domain.Character
 import inflate
 import loadUrl
 
-class CharactersAdapter(val listener: (CharacterDb) -> Unit) : RecyclerView.Adapter<CharactersAdapter.ViewHolder>() {
+class CharactersAdapter(val listener: (Character) -> Unit) : RecyclerView.Adapter<CharactersAdapter.ViewHolder>() {
 
-    var characters : List<CharacterDb> by basicDiffUtil(
+    var characters : List<Character> by basicDiffUtil(
         emptyList(),
         areItemsTheSame = { old, new -> old.id == new.id }
     )
@@ -29,7 +29,7 @@ class CharactersAdapter(val listener: (CharacterDb) -> Unit) : RecyclerView.Adap
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         private val binding = CharacterViewBinding.bind(view)
-        fun bind(character : CharacterDb) = with(binding){
+        fun bind(character : Character) = with(binding){
             characterName.text = character.name
             character.imageURL?.let { characterImage.loadUrl(it) }
         }
