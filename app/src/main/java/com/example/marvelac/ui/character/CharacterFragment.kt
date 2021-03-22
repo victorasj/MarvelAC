@@ -18,18 +18,22 @@ import com.example.marvelac.data.database.RoomDataSource
 import com.example.marvelac.data.server.MarvelDataSource
 import com.example.marvelac.databinding.FragmentCharacterBinding
 import loadUrl
+import org.koin.androidx.scope.ScopeFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-class CharacterFragment : Fragment() {
+class CharacterFragment : ScopeFragment() {
 
     private lateinit var binding : FragmentCharacterBinding
 
-    private lateinit var roomDataSource: RoomDataSource
-    private lateinit var charactersRepository: CharactersRepository
-    private lateinit var characterViewModel: CharacterViewModel
     private lateinit var adapterSeries: SeriesAdapter
     private lateinit var adapterComics: ComicsAdapter
 
     private val args: CharacterFragmentArgs by navArgs()
+
+    private val characterViewModel: CharacterViewModel by viewModel {
+        parametersOf(args.characterId)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +51,7 @@ class CharacterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        roomDataSource = RoomDataSource(app.db)
+        /*roomDataSource = RoomDataSource(app.db)
         charactersRepository = CharactersRepository(roomDataSource, MarvelDataSource())
         characterViewModel = ViewModelProvider(this,
             CharacterViewModelFactory(
@@ -55,7 +59,7 @@ class CharacterFragment : Fragment() {
                 GetCharacterSeries(charactersRepository),
                 GetCharacterComics(charactersRepository),
                 args.characterId))
-            .get()
+            .get()*/
 
         characterViewModel.character.observe(viewLifecycleOwner, Observer (::UpdateUI))
         characterViewModel.series.observe(viewLifecycleOwner, Observer (::UpdateUI))

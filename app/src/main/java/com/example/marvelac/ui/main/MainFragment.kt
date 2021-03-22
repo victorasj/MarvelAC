@@ -17,14 +17,17 @@ import com.example.marvelac.data.database.RoomDataSource
 import com.example.marvelac.data.server.MarvelDataSource
 import com.example.marvelac.databinding.FragmentMainBinding
 import getViewModel
+import org.koin.androidx.scope.ScopeFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainFragment : Fragment() {
+class MainFragment : ScopeFragment() {
 
     private lateinit var binding : FragmentMainBinding
 
-    private lateinit var mainViewModel : MainViewModel
     private lateinit var adapter: CharactersAdapter
     private lateinit var navController: NavController
+
+    private val mainViewModel : MainViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +42,6 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = view.findNavController()
 
-        mainViewModel = getViewModel { MainViewModel(GetCharacters(CharactersRepository(RoomDataSource(app.db), MarvelDataSource()))) }
         adapter = CharactersAdapter(mainViewModel::onCharacterClick)
         binding.recyclerviewCharacter.layoutManager = GridLayoutManager(context, 2)
         binding.recyclerviewCharacter.adapter = adapter
